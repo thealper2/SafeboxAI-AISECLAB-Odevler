@@ -1,0 +1,62 @@
+# Ornek Stored Procedure: Aşağıdaki Stored Procedure, veritabanında "Employees" tablosunda belirtilen EmployeeID'ye sahip çalışanın detaylarını döndürmektedir. 
+EmployeeID parametresi alır ve ilgili sorguyu çalıştırarak sonuçları döndürür.
+
+---
+
+CREATE PROCEDURE GetEmployeeDetails
+    @EmployeeID INT
+AS
+BEGIN
+    SELECT EmployeeName, Department, Salary
+    FROM Employees
+    WHERE EmployeeID = @EmployeeID
+END
+
+---
+
+# Aşağıdaki Trigger, "Orders" tablosuna yeni bir sipariş eklendiğinde, ilgili ürünün stoğunu güncellemektedir. 
+Sipariş tablosuna yapılan bir ekleme sonrasında, ilgili ürünün stoğundan sipariş miktarı kadar düşülmektedir.
+
+---
+
+CREATE TRIGGER UpdateStockQuantity
+ON Orders
+AFTER INSERT
+AS
+BEGIN
+    -- Yeni siparişlerin toplam stoğu güncelle
+    UPDATE Products
+    SET StockQuantity = StockQuantity - i.Quantity
+    FROM inserted i
+    WHERE Products.ProductID = i.ProductID
+END
+
+---
+
+# Python
+
+import mysql.connector
+
+# Veritabanına bağlanma
+connection = mysql.connector.connect(
+    host="localhost",
+    user="username",
+    password="password",
+    database="database_name"
+)
+
+# Cursor oluşturma
+cursor = connection.cursor()
+
+# Stored Procedure çağrısı
+cursor.callproc("sp_procedure_name", args)
+
+# Sonuçları almak ve/veya işlem yapmak
+results = cursor.stored_results()
+for result in results:
+    for row in result:
+        # İşlemler
+
+# Bağlantıyı kapatma
+cursor.close()
+connection.close()
