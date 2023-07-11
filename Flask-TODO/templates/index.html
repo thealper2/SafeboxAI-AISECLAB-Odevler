@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo App</title>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <ul>
+        {% for todo in todos %}
+            <li>
+                {{ todo.title }}
+                {% if not todo.completed %}
+                    <a href="/complete/{{ todo.id }}">Tamamla</a>
+                {% endif %}
+                <a href="/delete/{{ todo.id }}">Sil</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <h2>Yeni Görev Oluştur</h2>
+    <form action="/create" method="post">
+        <input type="text" name="title" placeholder="Görev Başlığı" required>
+        <button type="submit">Ekle</button>
+    </form>
+</body>
+</html>
